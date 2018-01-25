@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 const Otsikko = (props) => {
   return (
     <div>
-      <h1>{props.kurssi}</h1>
+      <h1>{props.kurssi.nimi}</h1>
     </div>
   );
 };
@@ -12,9 +12,9 @@ const Otsikko = (props) => {
 const Sisalto = (props) => {
   return (
     <div>
-      {props.osat.map(function (osa) {
+      {props.kurssi.osat.map((osa, index) => {
         return (
-          <Osa osa={osa}/>
+          <Osa key={index} osa={osa}/>
         );
       })}
     </div>
@@ -30,39 +30,41 @@ const Osa = (props) => {
 };
 
 const Yhteensa = (props) => {
-  {
-    let sum = 0;
-    props.osat.map(function (osa) {
-      sum += osa.tehtavia;
-    });
+   let sum = 0;
+   Object.keys(props.kurssi.osat).forEach((i) => {
+     sum += props.kurssi.osat[i].tehtavia;
+   });
     return (
-      <p>yhteensä {sum} tehtävää</p>
+      <div>
+        <p>yhteensä {sum} tehtävää</p>
+      </div>
     );
-  }
 };
 
 const App = () => {
-  const kurssi = 'Half Stack -sovelluskehitys';
-  const osat = [
-    {
-      nimi: 'Reactin perusteet',
-      tehtavia: 10,
-    },
-    {
-      nimi: 'Tiedonvälitys propseilla',
-      tehtavia: 7,
-    },
-    {
-      nimi: 'Komponenttien tila',
-      tehtavia: 14,
-    },
-  ];
+  const kurssi = {
+    nimi: 'Half Stack -sovelluskehitys',
+    osat: [
+      {
+        nimi: 'Reactin perusteet',
+        tehtavia: 10
+      },
+      {
+        nimi: 'Tiedonvälitys propseilla',
+        tehtavia: 7
+      },
+      {
+        nimi: 'Komponenttien tila',
+        tehtavia: 14
+      }
+    ]
+  }
 
   return (
     <div>
       <Otsikko kurssi={kurssi}/>
-      <Sisalto osat={osat}/>
-      <Yhteensa osat={osat}/>
+      <Sisalto kurssi={kurssi}/>
+      <Yhteensa kurssi={kurssi}/>
     </div>
   );
 };
