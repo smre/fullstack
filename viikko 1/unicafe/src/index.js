@@ -15,17 +15,21 @@ const Button = ({handleClick, text}) => (
 
 const Statistics = ({points, average, positive, all}) => {
   if (all.length === 0) {
-    return(
+    return (
       <p>ei yhtään palautetta annettu</p>
-    )
+    );
   } else {
     return (
       <div>
-        <Statistic name="Hyvä" value={points[0]} />
-        <Statistic name="Neutraali" value={points[1]} />
-        <Statistic name="Huono" value={points[2]} />
-        <Statistic name="Keskiarvo" value={average}/>
-        <Statistic name="Positiivisia" value={positive}/>
+        <table>
+          <tbody>
+          <Statistic name="Hyvä" value={points[0]}/>
+          <Statistic name="Neutraali" value={points[1]}/>
+          <Statistic name="Huono" value={points[2]}/>
+          <Statistic name="Keskiarvo" value={average}/>
+          <Statistic name="Positiivisia" value={positive}/>
+          </tbody>
+        </table>
       </div>
     );
   }
@@ -33,9 +37,10 @@ const Statistics = ({points, average, positive, all}) => {
 
 const Statistic = ({name, value}) => {
   return (
-    <div>
-      {name}: {value}
-    </div>
+    <tr>
+      <td>{name}:</td>
+      <td>{Math.round(value * 100) / 100} {name.includes('Positiivisia') ? '%' : ''}</td>
+    </tr>
   );
 };
 
