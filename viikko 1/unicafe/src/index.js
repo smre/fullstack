@@ -43,7 +43,7 @@ class App extends React.Component {
     };
   }
 
-  updateAverage = function (input) {
+  updateAverage (input) {
     let sum = 0;
     for (let i = 0; i < input.length; i++) {
       sum += input[i];
@@ -51,55 +51,37 @@ class App extends React.Component {
     return sum / input.length;
   };
 
-  updatePositive = function (input) {
+  updatePositive (input) {
     const positive = input.filter(function (i) {return i === 1;});
     return positive.length / input.length;
   };
 
-  clickHyva = () => {
-    this.setState({
-      hyva: this.state.hyva + 1,
-      kaikki: this.state.kaikki.concat(1),
-      average: this.updateAverage(this.state.kaikki.concat(1)),
-      positive: this.updatePositive(this.state.kaikki.concat(1)),
-    });
-
-  };
-
-  clickNeutraali = () => {
-    this.setState({
-      neutraali: this.state.neutraali + 1,
-      kaikki: this.state.kaikki.concat(0),
-      average: this.updateAverage(this.state.kaikki.concat(0)),
-      positive: this.updatePositive(this.state.kaikki.concat(0)),
-    });
-  };
-
-  clickHuono = () => {
-    this.setState({
-      huono: this.state.huono + 1,
-      kaikki: this.state.kaikki.concat(-1),
-      average: this.updateAverage(this.state.kaikki.concat(-1)),
-      positive: this.updatePositive(this.state.kaikki.concat(-1)),
-    });
+  clickButton = (button, value) => {
+    return () => {
+      this.setState({
+        [button]: this.state[button] + 1,
+        kaikki: this.state.kaikki.concat(value),
+        average: this.updateAverage(this.state.kaikki.concat(value)),
+        positive: this.updatePositive(this.state.kaikki.concat(value)),
+      });
+    };
   };
 
   render () {
-
     return (
       <div>
         <div>
           <Header header={'anna palautetta'}/>
           <Button
-            handleClick={this.clickHyva}
+            handleClick={this.clickButton('hyva', 1)}
             text='Hyvä'
           />
           <Button
-            handleClick={this.clickNeutraali}
+            handleClick={this.clickButton('neutraali', 0)}
             text='Neutraali'
           />
           <Button
-            handleClick={this.clickHuono}
+            handleClick={this.clickButton('huono', -1)}
             text='Huono'
           />
           <Header header={'statistiikka'}/>
