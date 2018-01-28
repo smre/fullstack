@@ -13,19 +13,28 @@ const Button = ({handleClick, text}) => (
   </button>
 );
 
-const Statistics = ({average, positive}) => {
-  return (
-    <div>
-      <Statistic name="Keskiarvo" value={average}/>
-      <Statistic name="Positiivisia" value={positive}/>
-    </div>
-  );
+const Statistics = ({points, average, positive, all}) => {
+  if (all.length === 0) {
+    return(
+      <p>ei yhtään palautetta annettu</p>
+    )
+  } else {
+    return (
+      <div>
+        <Statistic name="Hyvä" value={points[0]} />
+        <Statistic name="Neutraali" value={points[1]} />
+        <Statistic name="Huono" value={points[2]} />
+        <Statistic name="Keskiarvo" value={average}/>
+        <Statistic name="Positiivisia" value={positive}/>
+      </div>
+    );
+  }
 };
 
 const Statistic = ({name, value}) => {
   return (
     <div>
-      {name} {value}
+      {name}: {value}
     </div>
   );
 };
@@ -85,13 +94,11 @@ class App extends React.Component {
             text='Huono'
           />
           <Header header={'statistiikka'}/>
-          Hyvä: {this.state.hyva}<br/>
-          Neutraali: {this.state.neutraali}<br/>
-          Huono: {this.state.huono}<br/>
-
           <Statistics
+            points={[this.state.hyva, this.state.neutraali, this.state.huono]}
             average={this.state.average}
             positive={this.state.positive}
+            all={this.state.kaikki}
           />
         </div>
       </div>
