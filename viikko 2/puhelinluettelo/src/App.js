@@ -1,27 +1,23 @@
 import React from 'react';
+import axios from 'axios';
 import Name from './components/Name';
 
 class App extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      persons: [
-        {
-          name: 'Arto Hellas',
-          number: '123123789',
-          id: 1,
-        },
-        {
-          name: 'Lea Kutvonen',
-          number: '987654321',
-          id: 2,
-        },
-      ],
+      persons: [],
       newName: '',
       newNumber: '',
       filter: '',
     };
   };
+
+  componentDidMount () {
+    axios.get('http://localhost:3001/persons').then(response => {
+      this.setState({persons: response.data});
+    });
+  }
 
   addPerson = (event) => {
     event.preventDefault();
@@ -60,8 +56,8 @@ class App extends React.Component {
   render () {
     let personsToShow = this.state.filter.length === 0
       ? this.state.persons
-      : this.state.persons.filter(person => person.name.toLowerCase().
-        includes(this.state.filter.toLowerCase()));
+      : this.state.persons.filter(person => person.name.toLowerCase()
+      .includes(this.state.filter.toLowerCase()));
 
     return (
       <div>
