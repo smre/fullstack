@@ -32,12 +32,16 @@ const Yhteensa = ({kurssit}) => {
   );
 };
 
-const Kurssi = ({kurssi}) => {
+const Kurssi = ({kurssit}) => {
   return (
     <div>
-      <Otsikko name={kurssi.nimi}/>
-      <Sisalto kurssit={kurssi.osat}/>
-      <Yhteensa kurssit={kurssi}/>
+      {kurssit.map(kurssi =>
+        <div>
+          <Otsikko name={kurssi.nimi}/>
+          <Sisalto kurssit={kurssi.osat}/>
+          <Yhteensa kurssit={kurssi}/>
+        </div>)
+      }
     </div>
   );
 };
