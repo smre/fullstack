@@ -54,6 +54,18 @@ class App extends React.Component {
     this.setState({filter: event.target.value});
   };
 
+  deletePerson = (name, id) => {
+    return () => {
+      const result = window.confirm(
+        `Haluatko varmasti poistaa käyttäjän ${name}`);
+      if (result) {
+        nameService.remove(id).then(() => {
+          this.componentDidMount();
+        });
+      }
+    };
+  };
+
   render () {
     let personsToShow = this.state.filter.length === 0
       ? this.state.persons
@@ -90,8 +102,9 @@ class App extends React.Component {
         <h2>Numerot</h2>
         <ul>
           {personsToShow.map(
-            person => <Name key={person.id} name={person.name}
-                            number={person.number}/>)}
+            person => <Name key={person.id} id={person.id} name={person.name}
+                            number={person.number}
+                            deletePerson={this.deletePerson}/>)}
         </ul>
       </div>
     );
