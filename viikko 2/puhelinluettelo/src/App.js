@@ -27,17 +27,18 @@ class App extends React.Component {
     } else {
       const personObject = {
         name: this.state.newName,
-        number: this.state.newNumber,
-        id: this.state.persons.length + 1,
+        number: this.state.newNumber
       };
 
-      const persons = this.state.persons.concat(personObject);
-
-      this.setState({
-        persons: persons,
-        newName: '',
-        filter: '',
-      });
+      axios
+      .post('http://localhost:3001/persons', personObject)
+      .then(response => {
+        this.setState({
+          persons: this.state.persons.concat(response.data),
+          newName: '',
+          newNumber: ''
+        })
+      })
     }
   };
 
