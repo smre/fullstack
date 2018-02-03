@@ -1,33 +1,71 @@
 import React from 'react';
 
+const Name = ({name}) => {
+  return (
+    <li>
+      {name}
+    </li>
+  );
+};
+
 class App extends React.Component {
-  constructor(props) {
-    super(props)
+  constructor (props) {
+    super(props);
     this.state = {
       persons: [
-        { name: 'Arto Hellas' }
+        {
+          name: 'Arto Hellas',
+          id: 1,
+        },
       ],
-      newName: ''
-    }
+      newName: '',
+    };
   }
 
-  render() {
+  addName = (event) => {
+    event.preventDefault();
+    const nameObject = {
+      name: this.state.newName,
+      id: this.state.persons.length + 1,
+    };
+
+    const persons = this.state.persons.concat(nameObject);
+
+    this.setState({
+      persons: persons,
+      newName: '',
+    });
+  };
+
+  handleNameChange = (event) => {
+    this.setState({newName: event.target.value});
+  };
+
+  render () {
+    const personsToShow = this.state.persons;
+
     return (
       <div>
         <h2>Puhelinluettelo</h2>
-        <form>
+        <form onSubmit={this.addName}>
           <div>
-            nimi: <input />
+            <input
+              value={this.state.newName}
+              onChange={this.handleNameChange}
+            />
           </div>
           <div>
-            <button type="submit">lisää</button>
+            <button type="submit">tallenna</button>
           </div>
         </form>
         <h2>Numerot</h2>
-        ...
+        <ul>
+          {personsToShow.map(
+            person => <Name key={person.id} name={person.name}/>)}
+        </ul>
       </div>
-    )
+    );
   }
 }
 
-export default App
+export default App;
