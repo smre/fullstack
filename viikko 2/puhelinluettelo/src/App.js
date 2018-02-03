@@ -1,6 +1,7 @@
 import React from 'react';
 import Name from './components/Name';
 import nameService from './services/Persons';
+import Notification from './components/Notification';
 
 class App extends React.Component {
   constructor (props) {
@@ -10,6 +11,7 @@ class App extends React.Component {
       newName: '',
       newNumber: '',
       filter: '',
+      message: null,
     };
   };
 
@@ -24,7 +26,8 @@ class App extends React.Component {
     event.preventDefault();
 
     if (this.state.persons.some(person => person.name === this.state.newName)) {
-      const person = this.state.persons.filter(person => person.name === this.state.newName);
+      const person = this.state.persons.filter(
+        person => person.name === this.state.newName);
       const result = window.confirm(
         `Käyttäjä nimellä ${this.state.newName} on jo olemassa. Haluatko päivittää numeron?`);
       if (result) {
@@ -34,7 +37,13 @@ class App extends React.Component {
         };
         nameService.update(person[0].id, personObject).then(() => {
           this.componentDidMount();
+          this.setState(
+            {message: `Henkilön ${person[0].name} numero päivitettiin onnistuneesti.`});
         });
+        setTimeout(() => {
+          this.setState({message: null});
+        }, 3000);
+        ;
       }
     } else {
       const personObject = {
@@ -48,8 +57,12 @@ class App extends React.Component {
             persons: this.state.persons.concat(newPerson),
             newName: '',
             newNumber: '',
+            message: `${personObject.name} lisättiin onnistuneesti.`,
           });
         });
+      setTimeout(() => {
+        this.setState({message: null});
+      }, 3000);
     }
   };
 
@@ -72,7 +85,11 @@ class App extends React.Component {
       if (result) {
         nameService.remove(id).then(() => {
           this.componentDidMount();
-        });
+          this.setState({message: `Henkilö ${name} poistettiin onnistuneesti.`})
+        })
+        setTimeout(() => {
+          this.setState({message: null});
+        }, 3000);;
       }
     };
   };
@@ -86,6 +103,7 @@ class App extends React.Component {
     return (
       <div>
         <h2>Puhelinluettelo</h2>
+        <Notification message={this.state.message}/>
         <div>
           Rajaa näytettäviä<br/>
           <input onChange={this.handleFilter}/>
