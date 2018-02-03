@@ -1,12 +1,5 @@
 import React from 'react';
-
-const Name = ({name, number}) => {
-  return (
-    <li>
-      {name} {number}
-    </li>
-  );
-};
+import Name from './components/Name';
 
 class App extends React.Component {
   constructor (props) {
@@ -34,7 +27,7 @@ class App extends React.Component {
     event.preventDefault();
 
     if (this.state.persons.some(person => person.name === this.state.newName)) {
-      console.warn("I'm afraid I can't let you do that, Dave.");
+      console.warn('I\'m afraid I can\'t let you do that, Dave.');
     } else {
       const personObject = {
         name: this.state.newName,
@@ -62,19 +55,20 @@ class App extends React.Component {
 
   handleFilter = (event) => {
     this.setState({filter: event.target.value});
-  }
+  };
 
   render () {
-    let personsToShow = this.state.filter.length === 0 ?
-      this.state.persons :
-      this.state.persons.filter(person => person.name.toLowerCase().includes(this.state.filter.toLowerCase()));
+    let personsToShow = this.state.filter.length === 0
+      ? this.state.persons
+      : this.state.persons.filter(person => person.name.toLowerCase().
+        includes(this.state.filter.toLowerCase()));
 
     return (
       <div>
         <h2>Puhelinluettelo</h2>
         <div>
           Rajaa näytettäviä<br/>
-          <input onChange={this.handleFilter} />
+          <input onChange={this.handleFilter}/>
         </div>
         <h2>Lisää uusi</h2>
         <form onSubmit={this.addPerson}>
@@ -99,7 +93,8 @@ class App extends React.Component {
         <h2>Numerot</h2>
         <ul>
           {personsToShow.map(
-            person => <Name key={person.id} name={person.name} number={person.number}/>)}
+            person => <Name key={person.id} name={person.name}
+                            number={person.number}/>)}
         </ul>
       </div>
     );
