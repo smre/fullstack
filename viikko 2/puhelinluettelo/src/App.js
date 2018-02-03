@@ -24,7 +24,18 @@ class App extends React.Component {
     event.preventDefault();
 
     if (this.state.persons.some(person => person.name === this.state.newName)) {
-      console.warn('I\'m afraid I can\'t let you do that, Dave.');
+      const person = this.state.persons.filter(person => person.name === this.state.newName);
+      const result = window.confirm(
+        `Käyttäjä nimellä ${this.state.newName} on jo olemassa. Haluatko päivittää numeron?`);
+      if (result) {
+        const personObject = {
+          name: this.state.newName,
+          number: this.state.newNumber,
+        };
+        nameService.update(person[0].id, personObject).then(() => {
+          this.componentDidMount();
+        });
+      }
     } else {
       const personObject = {
         name: this.state.newName,
