@@ -1,6 +1,6 @@
 import React from 'react';
-import axios from 'axios';
 import Name from './components/Name';
+import nameService from './services/Persons';
 
 class App extends React.Component {
   constructor (props) {
@@ -14,9 +14,10 @@ class App extends React.Component {
   };
 
   componentDidMount () {
-    axios.get('http://localhost:3001/persons').then(response => {
-      this.setState({persons: response.data});
-    });
+    nameService.getAll()
+      .then(response => {
+        this.setState({persons: response});
+      });
   }
 
   addPerson = (event) => {
@@ -27,18 +28,17 @@ class App extends React.Component {
     } else {
       const personObject = {
         name: this.state.newName,
-        number: this.state.newNumber
+        number: this.state.newNumber,
       };
 
-      axios
-      .post('http://localhost:3001/persons', personObject)
-      .then(response => {
-        this.setState({
-          persons: this.state.persons.concat(response.data),
-          newName: '',
-          newNumber: ''
-        })
-      })
+      nameService.create(personObject)
+        .then(newPerson => {
+          this.setState({
+            persons: this.state.persons.concat(newPerson),
+            newName: '',
+            newNumber: '',
+          });
+        });
     }
   };
 
@@ -58,7 +58,7 @@ class App extends React.Component {
     let personsToShow = this.state.filter.length === 0
       ? this.state.persons
       : this.state.persons.filter(person => person.name.toLowerCase()
-      .includes(this.state.filter.toLowerCase()));
+        .includes(this.state.filter.toLowerCase()));
 
     return (
       <div>
