@@ -39,11 +39,14 @@ class App extends React.Component {
           this.componentDidMount();
           this.setState(
             {message: `Henkilön ${person[0].name} numero päivitettiin onnistuneesti.`});
+        }).catch(() => {
+            alert(`Muokkaus ei onnistunut. Henkilön ${person[0].name} tiedot on jo poistettu.`);
+            this.componentDidMount();
         });
+
         setTimeout(() => {
           this.setState({message: null});
         }, 3000);
-        ;
       }
     } else {
       const personObject = {
