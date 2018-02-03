@@ -18,11 +18,17 @@ class App extends React.Component {
           number: '123123789',
           id: 1,
         },
+        {
+          name: 'Lea Kutvonen',
+          number: '987654321',
+          id: 2,
+        },
       ],
       newName: '',
       newNumber: '',
+      filter: '',
     };
-  }
+  };
 
   addPerson = (event) => {
     event.preventDefault();
@@ -41,7 +47,7 @@ class App extends React.Component {
       this.setState({
         persons: persons,
         newName: '',
-        newNumber: '',
+        filter: '',
       });
     }
   };
@@ -54,12 +60,23 @@ class App extends React.Component {
     this.setState({newNumber: event.target.value});
   };
 
+  handleFilter = (event) => {
+    this.setState({filter: event.target.value});
+  }
+
   render () {
-    const personsToShow = this.state.persons;
+    let personsToShow = this.state.filter.length === 0 ?
+      this.state.persons :
+      this.state.persons.filter(person => person.name.toLowerCase().includes(this.state.filter.toLowerCase()));
 
     return (
       <div>
         <h2>Puhelinluettelo</h2>
+        <div>
+          Rajaa näytettäviä<br/>
+          <input onChange={this.handleFilter} />
+        </div>
+        <h2>Lisää uusi</h2>
         <form onSubmit={this.addPerson}>
           <div>
             <input
