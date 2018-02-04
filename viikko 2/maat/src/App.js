@@ -1,29 +1,32 @@
 import React from 'react';
 import axios from 'axios';
 
-const Content = ({countriesToShow}) => {
+const Content = ({countriesToShow, clickHandler}) => {
   if (countriesToShow.length > 10) {
     return (
       <p>Too many matches. Try to specify your request.</p>
-    )
+    );
   }
   if (countriesToShow.length === 1) {
     return (
       <div>
-        <h1>{countriesToShow[0].name} / {countriesToShow[0].nativeName}</h1><br/>
+        <h1>{countriesToShow[0].name} / {countriesToShow[0].nativeName}</h1>
+        <br/>
         <p>Capital: {countriesToShow[0].capital}</p><br/>
         <p>Population: {countriesToShow[0].population}</p><br/>
-        <img alt={countriesToShow[0].name} src={countriesToShow[0].flag} width={400}/>
+        <img alt={countriesToShow[0].name} src={countriesToShow[0].flag}
+             width={400}/>
       </div>
-    )
+    );
   }
   return (
     <ul>
       {countriesToShow.map(
-        country => <li key={country.name}>{country.name}</li>)}
+        country => <li onClick={clickHandler(country)}
+                       key={country.name}>{country.name}</li>)}
     </ul>
-  )
-}
+  );
+};
 
 class App extends React.Component {
   constructor (props) {
@@ -55,9 +58,19 @@ class App extends React.Component {
     }
   }
 
+  clickHandler = (country) => {
+    return () => {
+      this.setState({
+        matchingCountries: [country],
+      });
+    };
+  };
+
   handleCountryChange = (event) => {
     if (event.target.value.length > 0) {
       this.performSearch(event.target.value);
+    } else {
+      this.setState({matchingCountries: []});
     }
     this.setState({filter: event.target.value});
   };
@@ -74,7 +87,8 @@ class App extends React.Component {
           value={this.state.filter}
           onChange={this.handleCountryChange}
         />
-        <Content countriesToShow={countriesToShow} />
+        <Content countriesToShow={countriesToShow}
+                 clickHandler={this.clickHandler}/>
       </div>
     );
   }
