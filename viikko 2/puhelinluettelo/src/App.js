@@ -40,8 +40,9 @@ class App extends React.Component {
           this.setState(
             {message: `Henkilön ${person[0].name} numero päivitettiin onnistuneesti.`});
         }).catch(() => {
-            alert(`Muokkaus ei onnistunut. Henkilön ${person[0].name} tiedot on jo poistettu.`);
-            this.componentDidMount();
+          alert(
+            `Muokkaus ei onnistunut. Henkilön ${person[0].name} tiedot on jo poistettu.`);
+          this.componentDidMount();
         });
 
         setTimeout(() => {
@@ -88,11 +89,11 @@ class App extends React.Component {
       if (result) {
         nameService.remove(id).then(() => {
           this.componentDidMount();
-          this.setState({message: `Henkilö ${name} poistettiin onnistuneesti.`})
-        })
+          this.setState({message: `Henkilö ${name} poistettiin onnistuneesti.`});
+        });
         setTimeout(() => {
           this.setState({message: null});
-        }, 3000);;
+        }, 3000);
       }
     };
   };
