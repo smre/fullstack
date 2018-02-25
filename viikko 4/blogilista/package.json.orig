@@ -1,0 +1,32 @@
+{
+  "name": "blogilista",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+<<<<<<< HEAD
+    "start": "NODE_ENV=production node index.js",
+    "watch": "NODE_ENV=development nodemon index.js",
+    "test": "NODE_ENV=test jest --verbose"
+=======
+    "watch": "nodemon ./src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+>>>>>>> 21a5d93d1c562812920f0ddc7bfd4a05b155153e
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "dotenv": "^5.0.0",
+    "express": "^4.16.2",
+    "mongoose": "^5.0.7",
+    "nodemon": "^1.15.1"
+<<<<<<< HEAD
+  },
+  "devDependencies": {
+    "jest": "^22.4.2"
+=======
+>>>>>>> 21a5d93d1c562812920f0ddc7bfd4a05b155153e
+  }
+}
