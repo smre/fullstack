@@ -1,28 +1,45 @@
+const http = require('http');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const notesRouter = require('./controllers/blogs');
 
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
+const loginRouter = require('./controllers/login');
+const blogRouter = require('./controllers/blogs');
+const usersRouter = require('./controllers/users');
+const config = require('./utils/config');
 
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log('connected to database', process.env.MONGODB_URI);
-  })
-  .catch(err => {
-    console.log(err);
-  });
+const extractToken = (request, response, next) => {
+  const authorization = request.get('authorization');
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    request.token = authorization.substring(7);
+  }
 
+  next();
+};
+
+app.use(extractToken);
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/api', notesRouter);
 
-const PORT = 3003;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+mongoose.connect(config.mongoUrl);
+mongoose.Promise = global.Promise;
+
+app.use('/api/login', loginRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/blogs', blogRouter);
+
+const server = http.createServer(app);
+
+server.listen(config.port, () => {
+  console.log(`Server running on port ${config.port}`);
 });
+
+server.on('close', () => {
+  mongoose.connection.close();
+});
+
+module.exports = {
+  app, server,
+};

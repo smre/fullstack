@@ -2,93 +2,67 @@ const dummy = (blogs) => {
   return 1;
 };
 
+const byLikes = (b1, b2) => b2.likes - b1.likes;
+
 const totalLikes = (blogs) => {
-  let result = 0;
-  blogs.forEach((blog) => {
-    result += blog.likes;
-  });
-  return result;
+  const sumReducer = (sum, i) => sum + i;
+  return blogs.map(b => b.likes).reduce(sumReducer, 0);
 };
 
-const mostLiked = (blogs) => {
-  let index = 0;
-  let likes = 0;
-  blogs.forEach((blog, i) => {
-    if (blog.likes > likes) {
-      index = i;
-      likes = blog.likes;
-    }
-  });
-  return blogs[index];
+const favoriteBlog = (blogs) => {
+  if (blogs.length === 0) {
+    return null;
+  }
+
+  const favorite = blogs.sort(byLikes)[0];
+
+  return {
+    title: favorite.title,
+    author: favorite.author,
+    likes: favorite.likes,
+  };
 };
 
 const mostBlogs = (blogs) => {
-  if (blogs.length < 1) {
-    return undefined;
+  if (blogs.length === 0) {
+    return null;
   }
-  let authors = [];
-  blogs.forEach((blog) => {
-    authors.push(blog.author);
+
+  const reducer = (obj, blog) => {
+    obj[blog.author] = (obj[blog.author] || 0) + 1;
+    return obj;
+  };
+
+  const authors = blogs.reduce(reducer, {});
+
+  const blogCounts = Object.keys(authors).map(name => {
+    return {author: name, blogs: authors[name]};
   });
 
-  let counts = {};
-  let compare = 0;
-  let mostFrequent;
+  const byBlogs = (b1, b2) => b2.blogs - b1.blogs;
 
-  // find out most common
-  for (let i = 0, len = authors.length; i < len; i++) {
-    const blog = authors[i];
-
-    if (counts[blog] === undefined) {
-      counts[blog] = 1;
-    } else {
-      counts[blog] = counts[blog] + 1;
-    }
-
-    if (counts[blog] > compare) {
-      compare = counts[blog];
-      mostFrequent = authors[i];
-    }
-  }
-
-  return { author: mostFrequent, blogs: counts[mostFrequent]};
+  return blogCounts.sort(byBlogs)[0];
 };
 
 const mostLikes = (blogs) => {
-  if (blogs.length < 1) {
-    return undefined;
+  if (blogs.length === 0) {
+    return null;
   }
 
-  let authors = [];
-  blogs.forEach((blog) => {
-    authors.push(blog.author);
+  const reducer = (obj, blog) => {
+    obj[blog.author] = (obj[blog.author] || 0) + blog.likes;
+    return obj;
+  };
+
+  const authors = blogs.reduce(reducer, {});
+
+  const blogCounts = Object.keys(authors).map(name => {
+    return {author: name, likes: authors[name]};
   });
 
-  authors = Array.from(new Set(authors));
-
-  let likes = [];
-
-  for (let i = 0; i < authors.length; i++) {
-    likes[i] = 0;
-    for (let j = 0; j < blogs.length; j++) {
-      const blog = blogs[j];
-      if (blog.author === authors[i]) {
-        likes[i] += blog.likes;
-      }
-    }
-  }
-
-  let sorted = likes.slice();
-  sorted.sort(function(a,b){return b - a});
-  let index = likes.indexOf(sorted[0]);
-
-  return { author: authors[index], likes: sorted[0] };
+  return blogCounts.sort(byLikes)[0];
 };
 
 module.exports = {
-  dummy,
-  totalLikes,
-  mostLiked,
-  mostBlogs,
-  mostLikes
+  dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes,
 };
