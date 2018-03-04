@@ -3,6 +3,7 @@ import Blog from './components/Blog';
 import Togglable from "./components/Togglable";
 import blogService from './services/blogs';
 import loginService from './services/login';
+import PropTypes from 'prop-types'
 
 const NewBlogForm = ({ addBlog, handleFieldChange, newTitle, newAuthor, newUrl}) => {
   return (
@@ -32,7 +33,7 @@ const NewBlogForm = ({ addBlog, handleFieldChange, newTitle, newAuthor, newUrl})
       </form>
     </div>
   )
-}
+};
 
 const LoginForm = ({login, handleFieldChange, username, password, error}) => {
   return (
@@ -179,6 +180,14 @@ class App extends React.Component {
       </div>
     );
   }
+}
+
+NewBlogForm.propTypes = {
+  addBlog: PropTypes.func.isRequired,
+  handleFieldChange: PropTypes.func.isRequired,
+  newTitle: PropTypes.string.isRequired,
+  newAuthor: PropTypes.string.isRequired,
+  newUrl: PropTypes.string.isRequired
 }
 
 export default App;

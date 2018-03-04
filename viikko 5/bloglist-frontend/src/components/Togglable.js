@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class Togglable extends React.Component {
   toggleVisibility = () => {
@@ -30,3 +31,7 @@ export default class Togglable extends React.Component {
     );
   }
 }
+
+Togglable.propTypes = {
+  buttonLabel: PropTypes.string.isRequired,
+};
